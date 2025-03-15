@@ -9,7 +9,7 @@ import cv2
 import numpy as np
 from shapely.geometry import Polygon
 
-from card import DetectedCard
+from src.card import DetectedCard
 
 
 
