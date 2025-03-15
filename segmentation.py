@@ -9,11 +9,8 @@ import cv2
 import numpy as np
 from shapely.geometry import Polygon
 
+from card import DetectedCard
 
-class DetectedCard:
-    def __init__(self, img_bgr, rect):
-        self.img_bgr = img_bgr
-        self.rect = rect
 
 
 class Line(object):
@@ -275,7 +272,7 @@ def detect_cards(img):
         img = cv2.resize(img, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    _, sat, _ = cv2.split(cv2.cvtColor(img, cv2.COLOR_BGR2HSV))
+    sat = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)[:, :, 1]
 
     rects = find_rects(gray, sat)
 
