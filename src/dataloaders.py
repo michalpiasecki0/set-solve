@@ -27,7 +27,7 @@ class SetDataset(Dataset):
         self.transform = transform
 
     def __len__(self):
-        return len(self.landmarks_frame)
+        return len(self.set_labels)
 
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
@@ -36,10 +36,21 @@ class SetDataset(Dataset):
         img_name = self.root_dir / self.set_labels.iloc[idx, 0]
         image = skimage.io.imread(img_name)
         labels = self.set_labels.iloc[idx, 1:]
-        sample = {"image": image, "labels": labels}
+        labels = self.set_labels.iloc[idx, 1:]
+        sample = {"image": image, "labels": labels.values.astype(np.int8)}
 
         if self.transform:
             sample = self.transform(sample)
 
         return sample
     
+
+# test if working
+if __name__ == "__main__":
+    data_path = Path("/home/michal/personal/programming/set-solve/data") 
+    set_dataset = SetDataset(csv_file=(data_path / 'labels_final.csv'), root_dir=(data_path / "out"))
+    dataloader = DataLoader(set_dataset, batch_size=4)
+    batch = next(iter(dataloader))
+    print(batch["image"].shape)
+    print(batch["labels"].shape)
+    print(batch['labels'])
