@@ -1,11 +1,11 @@
 # set-solve
 
 ## Description
-You play Set.
-You have fun.
-You cannot find set on table.
-No fun anymore.
-Take photo, let machine rescue you.
+You play Set.  
+You have fun.  
+You cannot find set on table.  
+No fun.  
+Take photo, let machine rescue you.  
 
 ## TO DO (steps):
 * ~~write segmentation module~~
