@@ -1,16 +1,13 @@
 """Segmentation of a board image into cards."""
 
 import copy
-import glob
 import math
-import sys
 
 import cv2
 import numpy as np
 from shapely.geometry import Polygon
 
 from src.card import DetectedCard
-
 
 
 class Line(object):
@@ -33,9 +30,9 @@ class Line(object):
         x = (self.b * o.c - o.b * self.c) / w
         y = (o.a * self.c - self.a * o.c) / w
         return np.array([x, y])
- 
+
     def len(self):
-        if not hasattr(self, 'length'):
+        if not hasattr(self, "length"):
             self.length = math.hypot(self.vec[0], self.vec[1])
         return self.length
 
@@ -84,7 +81,10 @@ def find_rects_from_lines(lines):
         dist_a_to_int = math.hypot(a_to_int[0], a_to_int[1])
         b_to_int = b.p1 - intersection
         dist_b_to_int = math.hypot(b_to_int[0], b_to_int[1])
-        if dist_a_to_int > ENDPOINT_THRESHOLD_PIXELS and dist_b_to_int > ENDPOINT_THRESHOLD_PIXELS:
+        if (
+            dist_a_to_int > ENDPOINT_THRESHOLD_PIXELS
+            and dist_b_to_int > ENDPOINT_THRESHOLD_PIXELS
+        ):
             return False
         cost = dist_a_to_int + dist_b_to_int
 
@@ -115,6 +115,7 @@ def find_rects_from_lines(lines):
                 connections[j].append([i, ba])
 
     memo = {}
+
     def find_n_cycles(dest, cur, steps_left):
         # Can find a cycle from any node in the cycle; mandate we only find it from the smallest index
         if cur < dest:
@@ -140,11 +141,11 @@ def find_rects_from_lines(lines):
                 result[0] += next_cost
             output.extend(results)
 
-        output = [val + [cur] for val in output if val[0] < MIN_WIDTH * 6] 
+        output = [val + [cur] for val in output if val[0] < MIN_WIDTH * 6]
         memo[key] = copy.deepcopy(output)
         return output
 
-    # Find any 4-cycles in the line graph. 
+    # Find any 4-cycles in the line graph.
     potential_rects = []
     for i in range(len(lines)):
         cycles = find_n_cycles(i, i, 4)
@@ -153,10 +154,12 @@ def find_rects_from_lines(lines):
             cycle = cycle[1:]
             potential_rects.append([cost, cycle])
 
-
     def good_rect(indices):
         L = [lines[idx] for idx in indices[0:4]]
-        L = [Line(L[i-1].intersect(L[i]), L[i].intersect(L[(i+1)%4])) for i in range(4)]
+        L = [
+            Line(L[i - 1].intersect(L[i]), L[i].intersect(L[(i + 1) % 4]))
+            for i in range(4)
+        ]
         lens = [line.len() for line in L]
 
         # Check that side lengths are equal'ish
@@ -280,7 +283,9 @@ def detect_cards(img):
     for rect in rects:
         card_rect = order_points(rect)
 
-        sideways = (card_rect[1][0] - card_rect[0][0]) > (card_rect[2][1] - card_rect[1][1])
+        sideways = (card_rect[1][0] - card_rect[0][0]) > (
+            card_rect[2][1] - card_rect[1][1]
+        )
 
         card_w = 240
         card_h = 390
@@ -288,14 +293,12 @@ def detect_cards(img):
             card_w = 390
             card_h = 240
 
-        dst = np.array([
-            [0, 0],
-            [card_w, 0],
-            [card_w, card_h],
-            [0, card_h]], np.float32)
+        dst = np.array([[0, 0], [card_w, 0], [card_w, card_h], [0, card_h]], np.float32)
 
         xform = cv2.getPerspectiveTransform(card_rect, dst)
-        rect_img = cv2.warpPerspective(img, xform, (card_w, card_h), flags=cv2.INTER_NEAREST)
+        rect_img = cv2.warpPerspective(
+            img, xform, (card_w, card_h), flags=cv2.INTER_NEAREST
+        )
         # Crop off edges
         margin_x = 10
         margin_y = 20
@@ -303,7 +306,7 @@ def detect_cards(img):
         if sideways:
             rect_img = cv2.rotate(rect_img, cv2.ROTATE_90_CLOCKWISE)
 
-        rect_orig = (card_rect * 1/scale).astype(np.int32)
+        rect_orig = (card_rect * 1 / scale).astype(np.int32)
         cards.append(DetectedCard(rect_img, rect_orig))
 
     return cards

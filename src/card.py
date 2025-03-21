@@ -7,5 +7,3 @@ class DetectedCard:
     def color(self):
         color = self.img_bgr.mean(axis=(0, 1))
         return color
-    
-    

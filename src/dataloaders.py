@@ -1,13 +1,10 @@
-import io
-import os
 from pathlib import Path
 from typing import Callable
 
-import PIL.Image
-import skimage
-import PIL
 import numpy as np
 import pandas as pd
+import PIL
+import PIL.Image
 import torch
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader, Dataset
@@ -55,13 +52,15 @@ class SetDataset(Dataset):
 if __name__ == "__main__":
     data_path = Path("/home/michal/personal/programming/set-solve/data")
     set_dataset = SetDataset(
-        csv_file=(data_path / "labels_final.csv"), 
+        csv_file=(data_path / "labels_final.csv"),
         root_dir=(data_path / "out"),
-        transform=transforms.Compose([
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomVerticalFlip(),
-            transforms.Grayscale()
-        ])
+        transform=transforms.Compose(
+            [
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomVerticalFlip(),
+                transforms.Grayscale(),
+            ]
+        ),
     )
     dataloader = DataLoader(set_dataset, batch_size=4)
     batch = next(iter(dataloader))

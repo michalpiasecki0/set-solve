@@ -4,18 +4,11 @@ Currently it only takes single img and saves all cards segmented from an image.
 """
 
 import argparse
-import os
 
 import cv2
-import sys
-from pathlib import Path
-from typing import List
 
 from src.segmentation import detect_cards
-from src.card import DetectedCard
 from src.utils import save_detected_cards
-
-
 
 
 def parse_args():
