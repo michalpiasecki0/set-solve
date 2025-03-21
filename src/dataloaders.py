@@ -16,8 +16,7 @@ class SetDataset(Dataset):
     """
 
     def __init__(self, csv_file: str, root_dir: str, transform: Callable = None):
-        """AI is creating summary for __init__
-
+        """
         Args:
             csv_file ([type]): [description]
             root_dir ([type]): [description]
