@@ -1,3 +1,6 @@
+# to do
+* install repo according to installation guide
+* 
 # set-solve
 
 ## Description
@@ -34,3 +37,12 @@ pip install -r requirements.txt
 * write classifier for each feature
 * write tests for segmentation
 * write set logic
+
+
+# Kasia to do
+* install repo according to instruction
+* read `main.py`, understand what's happening and try to run with example input:
+(argparse give you arguments)  
+Hint `python main.py --img-path <your_argument> --output-path <your_argument>`  
+You should get segmented set cards in output folder.  
+* switch to your branch, make some modification in `classification.py` file and push it to your remote branch on repo   
