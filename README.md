@@ -1,6 +1,4 @@
-# to do
-* install repo according to installation guide
-* 
+
 # set-solve
 
 ## Description
