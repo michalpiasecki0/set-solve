@@ -26,3 +26,4 @@ if __name__ == "__main__":
     img = cv2.imread(args.img_path)
     detected_cards = detect_cards(img)
     save_detected_cards(detected_cards, args.output_path, args.grayscale)
+    print("hello")
