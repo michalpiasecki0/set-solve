@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 from shapely.geometry import Polygon
 
-from src.card import DetectedCard
+from src.solve import DetectedCard
 
 
 class Line(object):

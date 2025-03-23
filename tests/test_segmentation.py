@@ -6,7 +6,7 @@ from pathlib import Path
 root_path = str(Path(".").resolve())
 sys.path.append(str(Path(".").resolve()))
 
-from src.segmentation import detect_cards
+from src.segmentation import detect_cards # noqa: E402
 
 def test_detection():
     # fix to do -> incorrect for 14 cards

@@ -1,11 +1,12 @@
 import os
-import cv2 
+import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
 
 from typing import List
-from src.card import DetectedCard
+from src.solve import DetectedCard
+
 
 def cv2_imshow(img: np.ndarray):
     plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
@@ -32,4 +33,4 @@ def save_detected_cards(
             if grayscale_img
             else card.img_bgr
         )
-        cv2.imwrite(f"{output_dir}/{idx+start_idx}.jpg", card_processed)
+        cv2.imwrite(f"{output_dir}/{idx + start_idx}.jpg", card_processed)
