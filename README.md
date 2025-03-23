@@ -38,9 +38,18 @@ pip install -r requirements.txt
 
 
 # Kasia to do
-* install repo according to instruction
-* read `main.py`, understand what's happening and try to run with example input:
-(argparse give you arguments)  
-Hint `python main.py --img-path <your_argument> --output-path <your_argument>`  
-You should get segmented set cards in output folder.  
-* switch to your branch, make some modification in `classification.py` file and push it to your remote branch on repo   
+* in your local repo do following
+1. switch to main branch  
+`git checkout main`   
+2. update branch with newest changes  
+`git pull`  
+3. create new branch in LOCAL repository, by taking branch from remote  
+`git checkout -b kasia-practice origin/kasia-practice`
+4. now you are LOCALLY on branch `kasia-practice` where you can write functions (you can verify with `git status`)
+5. install requirements again as i added some libs
+`pip install -r requirements.txt`  
+* in file `src/solve.py`, you will find classes which implements SetLogic
+* I left two methods `find_sets.py` `is_set.py` for you to implement (#TODO)
+ In order to test solutions there are tests in `tests/test_solver.py`.
+ you can test by running `pytest` from repo root path.
+
