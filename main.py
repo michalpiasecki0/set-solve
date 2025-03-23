@@ -1,6 +1,6 @@
 """
 Main script.
-Currently it only takes single img and saves all cards segmented from an image.
+Currently it only takes single img and saves all cards segmented from an image..
 """
 
 import argparse
