@@ -60,10 +60,9 @@ class SetSolver:
         Returns:
             bool: True if the cards form a set, False otherwise.
         """
-        coordinate_sums = list(
-            (card1.values[i] + card2.values[i] + card3.values[i]) % 3 for i in range(4)
-        )
-        return coordinate_sums == [0, 0, 0, 0]
+        # TODO
+        # finish this function
+        return None
 
     def find_sets(self) -> List[tuple]:
         """
@@ -72,9 +71,6 @@ class SetSolver:
         Returns:
             list: List of tuples, each containing three indices of cards that form a set.
         """
-        sets = []
-        three_el_combinations = list(combinations(range(len(self.cards)), 3))
-        for idx1, idx2, idx3 in three_el_combinations:
-            if self._is_set(self.cards[idx1], self.cards[idx2], self.cards[idx3]):
-                sets.append((idx1, idx2, idx3))
-        return sets
+        # TODO
+        # finish this function
+        return None
