@@ -49,7 +49,7 @@ pip install -r requirements.txt
 5. install requirements again as i added some libs
 `pip install -r requirements.txt`  
 * in file `src/solve.py`, you will find classes which implements SetLogic
-* I left two methods `find_sets.py` `is_set.py` for you to implement (#TODO)
- In order to test solutions there are tests in `tests/test_solver.py`.
+* I left two methods `find_sets.py` `is_set.py` for you to implement (#TODO)  
+ In order to test solutions there are tests in `tests/test_solver.py`.  
  you can test by running `pytest` from repo root path.
 
