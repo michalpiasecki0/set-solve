@@ -55,21 +55,20 @@ def train(
         for i, batch in tqdm(enumerate(dataloader)):
             model.train()
             x, y = batch["image"].to(device), batch["labels"].to(device, dtype=torch.long)
-            print(x.dtype, y.dtype)
             #exit()
             y = y.permute((1, 0))
             optimizer.zero_grad()
-            out = model(x)
-            loss_color = criterion(out[0], y[0])
-            loss_count = criterion(out[1], y[1])
-            loss_fill = criterion(out[2], y[2])
-            loss_shape = criterion(out[3], y[3])
+            out_color, out_count, out_fill, out_shape = model(x)
+            loss_color = criterion(out_color, y[0])
+            loss_count = criterion(out_count, y[1])
+            loss_fill = criterion(out_fill, y[2])
+            loss_shape = criterion(out_shape, y[3])
             total_loss = loss_color + loss_count + loss_fill + loss_shape
 
             total_loss.backward()
             optimizer.step()
 
-            if i % 100 == 0:
+            if i % 10 == 0:
                 print(f"Epoch: {epoch}, Loss: {total_loss.item()}")
 
 
@@ -95,4 +94,4 @@ if __name__ == "__main__":
     )
     dataloader = DataLoader(set_dataset, batch_size=15)
 
-    train(model, optimizer, dataloader, 10, device)
+    train(model, optimizer, dataloader, 30, device)
