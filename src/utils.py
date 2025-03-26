@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-from typing import List
+from typing import List, Callable
 from src.solve import DetectedCard
 
 
@@ -34,3 +34,19 @@ def save_detected_cards(
             else card.img_bgr
         )
         cv2.imwrite(f"{output_dir}/{idx + start_idx}.jpg", card_processed)
+
+
+def get_model(model: Callable, weights_path: str):
+    """
+    Load model with weights from weights_path.
+
+    Args:
+        model (Callable): Model class
+        weights_path (str): Path to weights
+
+    Returns:
+        model: Model with loaded weights
+    """
+    model_instance = model()
+    model_instance.load_state_dict(torch.load(weights_path))
+    return model_instance
