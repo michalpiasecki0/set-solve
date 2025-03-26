@@ -1,6 +1,8 @@
 import os
 import sys
 from pathlib import Path
+
+import torch
 from torchvision.transforms import transforms
 
 COLOR_MAPPING = {"Red": 0, "Green": 1, "Purple": 2}
@@ -12,7 +14,10 @@ DATA_PATH: Path = Path(__file__).resolve().parent.parent / "data"
 
 
 RUN_TRANSFORM = transforms.Compose(
-    [transforms.ToTensor(), transforms.Resize((120, 120))]
+    [
+        transforms.Resize((120, 120)),
+        transforms.ConvertImageDtype(torch.float32),
+    ]
 )
 TRAIN_TRANSFORM = transforms.Compose(
     [

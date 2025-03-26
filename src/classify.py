@@ -174,7 +174,7 @@ class Trainer:
 
 
 if __name__ == "__main__":
-    task = Task.init(project_name="SetSolve", task_name="Training")
+    #task = Task.init(project_name="SetSolve", task_name="Training")
 
     set_dataset = SetDataset(
         csv_file=(DATA_PATH / "labels_final.csv"),
@@ -188,6 +188,9 @@ if __name__ == "__main__":
             ]
         ),
     )
+    batch = next(iter(set_dataset))
+    print(batch[0].dtype)
+    exit()
     model = MultiOutputCNN()
     trainer = Trainer(
         model=model,

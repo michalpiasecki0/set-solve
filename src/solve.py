@@ -2,6 +2,10 @@ import numpy as np
 from typing import List, Optional
 from itertools import combinations
 
+import torch
+
+from src.constants import RUN_TRANSFORM
+
 
 class DetectedCard:
     def __init__(
@@ -42,9 +46,18 @@ class DetectedCard:
 class SetSolver:
     def __init__(self, cards: List[DetectedCard] = []):
         self.cards = cards
-        assert len(self.cards) == len(set(self.cards)), (
-            "Found duplicates in cards. Make sure to provide unique cards in a list"
-        )
+        # assert len(self.cards) == len(set(self.cards)), (
+        #    "Found duplicates in cards. Make sure to provide unique cards in a list"
+        # )
+        self.tensor_for_net = self._get_combined_tensor()
+
+    def _get_combined_tensor(self):
+        """
+        Get internal representation of cards for set solving.
+        """
+        stacked_imgs = torch.stack([torch.tensor(card.img_bgr) for card in self.cards])
+        stacked_imgs = RUN_TRANSFORM(stacked_imgs)
+        return stacked_imgs
 
     def _is_set(
         self, card1: DetectedCard, card2: DetectedCard, card3: DetectedCard
