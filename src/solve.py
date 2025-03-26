@@ -61,8 +61,12 @@ class SetSolver:
             bool: True if the cards form a set, False otherwise.
         """
         # TODO
-        # finish this function
-        return None
+        # a triple forms a set iff for each feature the sum of values is 0 mod 3
+        for i in range(4): # check the 4 features (number, color, shape, fill) one by one
+            if (card1.values[i] + card2.values[i] + card3.values[i]) % 3 != 0: # if for any feature the sum is not 0 mod 3 then it cannot be a set
+                return False
+        return True # if it passed the check for each feature then it is a set
+
 
     def find_sets(self) -> List[tuple]:
         """
@@ -73,4 +77,11 @@ class SetSolver:
         """
         # TODO
         # finish this function
-        return None
+        found_sets = []
+        n = len(self.cards)
+        for i in range(n):
+            for j in range(i+1, n):
+                for k in range(j+1, n):
+                    if self._is_set(self.cards[i], self.cards[j], self.cards[k]):
+                        found_sets.append((i, j, k))
+        return found_sets
