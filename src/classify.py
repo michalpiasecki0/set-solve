@@ -11,6 +11,7 @@ from torch.utils.data import DataLoader, Subset
 
 from dataloaders import SetDataset
 from net import MultiOutputCNN
+from constants import DATA_PATH
 
 BATCH_SIZE = 16
 
@@ -132,10 +133,9 @@ class Trainer:
 
 
 if __name__ == "__main__":
-    data_path = Path("/home/michal/personal/programming/set-solve/data")
     set_dataset = SetDataset(
-        csv_file=(data_path / "labels_final.csv"),
-        root_dir=(data_path / "out"),
+        csv_file=(DATA_PATH / "labels_final.csv"),
+        root_dir=(DATA_PATH / "out"),
         transform=transforms.Compose(
             [
                 transforms.ToTensor(),
@@ -148,8 +148,8 @@ if __name__ == "__main__":
     model = MultiOutputCNN()
     trainer = Trainer(
         model=model,
-        dataset_path=data_path / "out",
-        labels_path=data_path / "labels_final.csv",
+        dataset_path=DATA_PATH / "out",
+        labels_path=DATA_PATH / "labels_final.csv",
         transform=transforms.Compose(
             [
                 transforms.ToTensor(),
