@@ -1,11 +1,13 @@
 import numpy as np
+import os
 from typing import List, Optional
 from itertools import combinations
 
 import torch
 import torch.nn.functional as F
-from src.constants import RUN_TRANSFORM
+from src.constants import RUN_TRANSFORM, COUNT_MAPPING
 from src.segmentation import detect_cards
+import cv2
 
 
 class DetectedCard:
@@ -29,6 +31,8 @@ class DetectedCard:
             )
 
         self.values = values if values else []  # number, color, shape, fill
+        self.values_human = []
+    
 
     def __eq__(self, other):
         """
@@ -45,29 +49,25 @@ class DetectedCard:
 
 
 class SetSolver:
-    def __init__(self, img: np.ndarray, model: torch.nn.Module):
+    def __init__(self, 
+                 img: np.ndarray, 
+                 model: torch.nn.Module,
+                 out_path: str):
         self.img = img
         self.model = model
-
+        
+        self.out_path = out_path
+        os.makedirs(self.out_path, exist_ok=True)
+        
         self.cards: List[DetectedCard] = [
             DetectedCard(img_bgr, rect) for img_bgr, rect in detect_cards(img)
         ]
         self._combined_tensor: torch.Tensor = self._get_combined_tensor()
-        # self.tensor_for_net = self._get_combined_tensor()
         self.sets = []
 
-
-    def predict_card_values(self) -> None:
-        print(self._combined_tensor.shape)
-        out = self.model(self._combined_tensor)
-        predicted_values = torch.argmax(out, dim=2).T
-        for idx, card in enumerate(self.cards):
-            card.values = predicted_values[idx].tolist()
-            print(card.values)
-
-    def _get_combined_tensor(self):
+    def _get_combined_tensor(self) -> torch.Tensor:
         """
-        Get internal representation of cards for set solving.
+        Get stacked tensor for all images of cards .
         """
         return torch.stack([(card._tensor_img) for card in self.cards])
 
@@ -89,6 +89,37 @@ class SetSolver:
             (card1.values[i] + card2.values[i] + card3.values[i]) % 3 for i in range(4)
         )
         return coordinate_sums == [0, 0, 0, 0]
+    
+
+    def _present_set(self, set_indices, out_path: str) -> None:
+        """
+        Display the images of cards that form a set combined into one image.
+
+        Args:
+        set_indices (tuple): Indices of the cards that form a set.
+        """
+        card_imgs = [self.cards[idx].img_bgr for idx in set_indices]
+        print([self.cards[idx].values for idx in set_indices])
+        combined_img = cv2.hconcat(card_imgs)  
+        cv2.imwrite(out_path, combined_img)
+    
+    def present_sets(self):
+        """
+        Display all sets of cards.
+        """
+        assert self.sets, "No sets found."
+        for idx, set_indices in enumerate(self.sets):
+            self._present_set(set_indices, f"{self.out_path}/set_{idx}.jpg")
+
+    def predict_card_values(self) -> None:
+        """
+        Run model on card images to predict its values [number, color, shape, fill]
+        # Note: Possibly could be done more 
+        """
+        out = self.model(self._combined_tensor)
+        predicted_values = torch.argmax(out, dim=2).T
+        for idx, card in enumerate(self.cards):
+            card.values = predicted_values[idx].tolist()
 
     def find_sets(self) -> List[tuple]:
         """
@@ -103,4 +134,6 @@ class SetSolver:
             if self._is_set(self.cards[idx1], self.cards[idx2], self.cards[idx3]):
                 sets.append((idx1, idx2, idx3))
         self.sets = sets
-        return sets
+
+    
+        
