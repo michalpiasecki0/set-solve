@@ -189,6 +189,7 @@ if __name__ == "__main__":
         ),
     )
     batch = next(iter(set_dataset))
+    print(batch[0].max(), batch[0].min())
     print(batch[0].dtype)
     exit()
     model = MultiOutputCNN()

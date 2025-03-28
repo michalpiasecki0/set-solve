@@ -7,7 +7,6 @@ import cv2
 import numpy as np
 from shapely.geometry import Polygon
 
-from src.solve import DetectedCard
 
 
 class Line(object):
@@ -307,6 +306,6 @@ def detect_cards(img):
             rect_img = cv2.rotate(rect_img, cv2.ROTATE_90_CLOCKWISE)
 
         rect_orig = (card_rect * 1 / scale).astype(np.int32)
-        cards.append(DetectedCard(rect_img, rect_orig))
+        cards.append((rect_img, rect_orig))
 
     return cards

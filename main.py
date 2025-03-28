@@ -6,10 +6,11 @@ Currently it only takes single img and saves all cards segmented from an image..
 import argparse
 
 import cv2
+import os
 
-from src.segmentation import detect_cards
-from src.utils import save_detected_cards
-
+from src.solve import SetSolver
+from src.net import MultiOutputCNN
+from src.utils import get_model
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run set detection on img.")
@@ -24,5 +25,17 @@ def parse_args():
 if __name__ == "__main__":
     args = parse_args()
     img = cv2.imread(args.img_path)
-    detected_cards = detect_cards(img)
-    save_detected_cards(detected_cards, args.output_path, args.grayscale)
+    #save_detected_cards(detected_cards, args.output_path, args.grayscale)
+    model_fn = MultiOutputCNN
+    model_path = "/home/michal/personal/programming/set-solve/data/set_classifier_simple.pth"
+    model = get_model(model_fn, model_path)
+    print(model)
+    solver = SetSolver(img, model)
+    solver.predict_card_values()
+    print("--------------------------------------------")
+    print(solver.find_sets())
+    print(solver.cards[0], solver.cards[7], solver.cards[11])
+    os.makedirs(args.output_path, exist_ok=True)
+    cv2.imwrite(f"{args.output_path}/card_0.jpg", solver.cards[0].img_bgr)
+    cv2.imwrite(f"{args.output_path}/card_7.jpg", solver.cards[7].img_bgr)
+    cv2.imwrite(f"{args.output_path}/card_11.jpg", solver.cards[11].img_bgr)

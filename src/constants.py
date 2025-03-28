@@ -15,6 +15,7 @@ DATA_PATH: Path = Path(__file__).resolve().parent.parent / "data"
 
 RUN_TRANSFORM = transforms.Compose(
     [
+        transforms.ToTensor(),
         transforms.Resize((120, 120)),
         transforms.ConvertImageDtype(torch.float32),
     ]
