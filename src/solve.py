@@ -91,7 +91,7 @@ class SetSolver:
         return coordinate_sums == [0, 0, 0, 0]
     
 
-    def _present_set(self, set_indices, out_path: str) -> None:
+    def _save_set(self, set_indices, out_path: str) -> None:
         """
         Display the images of cards that form a set combined into one image.
 
@@ -99,9 +99,20 @@ class SetSolver:
         set_indices (tuple): Indices of the cards that form a set.
         """
         card_imgs = [self.cards[idx].img_bgr for idx in set_indices]
-        print([self.cards[idx].values for idx in set_indices])
         combined_img = cv2.hconcat(card_imgs)  
         cv2.imwrite(out_path, combined_img)
+    
+    def _present_set_on_img(self, set_indices: str, out_path: str) -> None:
+        color = tuple(np.random.randint(0, 256, size=3).tolist())
+        
+        img = self.img.copy()
+        for idx in set_indices:
+            rect = self.cards[idx].rect
+            pts = rect.reshape((-1, 1, 2))
+            
+            cv2.polylines(img, [pts], isClosed=True, color=color, thickness=40)
+        # Save the image with highlighted sets
+        cv2.imwrite(out_path, img)
     
     def present_sets(self):
         """
@@ -109,7 +120,9 @@ class SetSolver:
         """
         assert self.sets, "No sets found."
         for idx, set_indices in enumerate(self.sets):
-            self._present_set(set_indices, f"{self.out_path}/set_{idx}.jpg")
+            self._save_set(set_indices, f"{self.out_path}/set_{idx}.jpg")
+            self._present_set_on_img(set_indices, f"{self.out_path}/img_set_{idx}.jpg")
+
 
     def predict_card_values(self) -> None:
         """
