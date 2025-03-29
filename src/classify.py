@@ -15,6 +15,7 @@ from constants import DATA_PATH
 
 from clearml import Task, Logger
 
+
 BATCH_SIZE = 16
 
 
@@ -174,8 +175,9 @@ class Trainer:
 
 
 if __name__ == "__main__":
-    #task = Task.init(project_name="SetSolve", task_name="Training")
+    # task = Task.init(project_name="SetSolve", task_name="Training")
 
+    # ------------ Load dataset ---------------------------
     set_dataset = SetDataset(
         csv_file=(DATA_PATH / "labels_final.csv"),
         root_dir=(DATA_PATH / "out"),
@@ -188,10 +190,8 @@ if __name__ == "__main__":
             ]
         ),
     )
-    batch = next(iter(set_dataset))
-    print(batch[0].max(), batch[0].min())
-    print(batch[0].dtype)
-    exit()
+
+    # ----------------- Train -------------------
     model = MultiOutputCNN()
     trainer = Trainer(
         model=model,

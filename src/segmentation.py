@@ -8,7 +8,6 @@ import numpy as np
 from shapely.geometry import Polygon
 
 
-
 class Line(object):
     def __init__(self, p1, p2):
         vec = p2 - p1

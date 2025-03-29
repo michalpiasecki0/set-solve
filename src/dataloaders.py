@@ -19,7 +19,7 @@ class SetDataset(Dataset):
         """
         Args:
             csv_file (str): path to csv with ground truth labels
-            root_dir (str): 
+            root_dir (str):
             transform ([type], optional): [description]. Defaults to None.
         """
         self.set_labels = pd.read_csv(csv_file)
@@ -40,9 +40,9 @@ class SetDataset(Dataset):
 
         if self.transform:
             image = self.transform(image)
-        #image = np.array(image)
+        # image = np.array(image)
 
-        #sample = {"image": image, "labels": labels.values.astype(np.int8)}
+        # sample = {"image": image, "labels": labels.values.astype(np.int8)}
 
         return image, labels.values.astype(np.int8)
 
@@ -50,15 +50,16 @@ class SetDataset(Dataset):
         """
         Split dataset into train and test set with given ratio.
         Args:
-            split_ratio (int): train / test ratio 
+            split_ratio (int): train / test ratio
         Returns:
             Tuple[List]: [indices_for_train], [indices_for_test]
         """
         dataset_size = len(self)
         indices = np.arange(dataset_size)
-        np.random.shuffle(indices) # shuffle indices in place
+        np.random.shuffle(indices)  # shuffle indices in place
         split_point = int(np.floor(split_ratio * dataset_size))
         return indices[:split_point], indices[split_point:]
+
 
 # test if working
 if __name__ == "__main__":

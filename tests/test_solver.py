@@ -33,7 +33,8 @@ def cards_data() -> List[DetectedCard]:
 
 
 def test_is_set(cards_data: List[DetectedCard]):
-    solver = SetSolver(cards_data)
+    solver = SetSolver(img=np.zeros((100, 100, 3)),
+                       cards=cards_data)
 
     # Test if three identical cards form a set
     c1, c2, c3, c4, _ = cards_data
@@ -42,7 +43,8 @@ def test_is_set(cards_data: List[DetectedCard]):
 
 
 def test_solver(cards_data: List[DetectedCard]):
-    solver = SetSolver(cards_data)
+    solver = SetSolver(img=np.zeros((100, 100, 3)),
+                       cards=cards_data)
 
     sets = solver.find_sets()
     assert len(sets) == 2

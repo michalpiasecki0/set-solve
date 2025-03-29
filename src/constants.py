@@ -11,7 +11,6 @@ SHAPE_MAPPING = {"Diamond": 0, "Oval": 1, "Squiggle": 2}
 COUNT_MAPPING = {1: 0, 2: 1, 3: 2}
 
 
-
 DATA_PATH: Path = Path(__file__).resolve().parent.parent / "data"
 
 
