@@ -32,7 +32,10 @@ if __name__ == "__main__":
     
     
     
-    solver = SetSolver(img, model, args.output_path)
+    solver = SetSolver(img=img, 
+                       cards=None,
+                       model=model, 
+                       out_path=args.output_path)
     solver.predict_card_values()
     print("--------------------------------------------")
     print(solver.find_sets())
